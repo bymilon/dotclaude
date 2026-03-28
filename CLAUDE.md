@@ -8,23 +8,25 @@
 
 ## Project
 
-- **Name**: <!-- your-project-name -->
-- **Description**: <!-- one-line description -->
-- **Stack**: <!-- e.g., Bun + Hono + libSQL / SvelteKit + Cloudflare -->
-- **Repo**: <!-- https://github.com/org/repo -->
+- **Name**: `TODO` — replace with your project name
+- **Description**: `TODO` — one-line description of your project
+- **Stack**: `TODO` — e.g., Bun + Hono + libSQL / SvelteKit + Cloudflare / Laravel + Livewire
+- **Repo**: `TODO` — e.g., https://github.com/org/repo
 
 ## Quick Reference
 
 ```bash
 # Development
-<!-- bun run dev / composer run dev / cargo run -->
+# TODO: replace with your dev command — e.g., bun run dev / composer run dev / cargo run
 
 # Tests
-<!-- bun test / php artisan test / cargo test -->
+# TODO: replace with your test command — e.g., bun test / php artisan test / cargo test
 
 # Lint
-<!-- bun run lint / php vendor/bin/pint / cargo clippy -->
+# TODO: replace with your lint command — e.g., bun run lint / php vendor/bin/pint / cargo clippy
 
-# Build
-<!-- bun run build / npm run build -->
+# Build (if applicable)
+# TODO: replace with your build command — e.g., bun run build / npm run build
 ```
+
+> **Setup**: After cloning, fill in the TODOs above and run `./setup.sh` (or `.\setup.ps1` on Windows).

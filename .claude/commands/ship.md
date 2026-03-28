@@ -12,23 +12,36 @@ Execute the following steps in order. Stop at any failure.
 
 ### Step 1 — Lint
 
-Auto-detect the linter from project manifests:
-- `package.json` → look for `lint` script, or run `npx eslint . --fix` / `npx prettier --write .`
-- `composer.json` → `php vendor/bin/pint --dirty`
-- `Cargo.toml` → `cargo clippy --fix --allow-dirty`
-- `pyproject.toml` → `ruff check --fix .`
+Auto-detect the linter (same logic as `pre-commit-lint.sh`):
 
-Run the linter. If it auto-fixes files, stage the fixes. If lint fails after auto-fix, **stop and report**.
+| Stack | Detection | Command |
+|-------|-----------|---------|
+| JS/TS | `biome.json` | `npx @biomejs/biome check --write .` |
+| JS/TS | `.eslintrc*` or `eslint.config.*` | `npx eslint --fix .` |
+| JS/TS | `"lint"` script in package.json | `bun run lint` / `npm run lint` |
+| PHP | `pint.json` or `vendor/laravel/pint` | `php vendor/bin/pint --dirty` |
+| Rust | `Cargo.toml` | `cargo clippy --fix --allow-dirty` |
+| Python | `pyproject.toml` + ruff installed | `ruff check --fix .` |
+| Go | `go.mod` | `gofmt -l -w .` |
+
+Run the linter. If it auto-fixes files, stage the fixes. If lint fails after auto-fix, **stop and report**. If no linter detected, **warn and continue**.
 
 ### Step 2 — Test
 
-Auto-detect the test runner:
-- `package.json` → `bun test` or `npx vitest run` or `npx jest`
-- `composer.json` → `php artisan test` or `php vendor/bin/phpunit`
-- `Cargo.toml` → `cargo test`
-- `pyproject.toml` → `pytest`
+Auto-detect the test runner (same logic as `pre-push-test.sh`):
 
-Run the test suite. If tests fail, **stop and report** which tests failed.
+| Stack | Detection | Command |
+|-------|-----------|---------|
+| JS/TS | `vitest.config.*` | `npx vitest run` |
+| JS/TS | `jest.config.*` | `npx jest` |
+| JS/TS | `"test"` script in package.json | `bun test` / `npm test` |
+| PHP | Pest in composer.json | `php artisan test` |
+| PHP | PHPUnit only | `php vendor/bin/phpunit` |
+| Rust | `Cargo.toml` | `cargo test` |
+| Python | `pyproject.toml` / `pytest.ini` | `pytest` |
+| Go | `go.mod` | `go test ./...` |
+
+Run the test suite. If tests fail, **stop and report** which tests failed. If no test runner detected, **warn and continue**.
 
 ### Step 3 — Stage + Commit
 

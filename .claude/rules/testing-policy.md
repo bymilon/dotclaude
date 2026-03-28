@@ -46,5 +46,17 @@ Examples:
 
 ### Test Runner
 
-<!-- Configure for your stack -->
-<!-- bun test / vitest / jest / phpunit / cargo test / pytest -->
+Auto-detected by the `pre-push-test.sh` hook. The hook checks for config files in this priority:
+
+| Stack | Detection | Command |
+|-------|-----------|---------|
+| JS/TS | `vitest.config.*` or `"vitest"` in package.json | `npx vitest run` |
+| JS/TS | `jest.config.*` or `"jest"` in package.json | `npx jest` |
+| JS/TS | `"test"` script in package.json | `bun test` / `npm test` |
+| PHP | `phpunit.xml` + `pestphp/pest` in composer.json | `php artisan test` |
+| PHP | `phpunit.xml` without Pest | `php vendor/bin/phpunit` |
+| Rust | `Cargo.toml` | `cargo test` |
+| Python | `pyproject.toml` or `pytest.ini` | `pytest` |
+| Go | `go.mod` | `go test ./...` |
+
+To override auto-detection, set your test command in CLAUDE.md's Quick Reference section.

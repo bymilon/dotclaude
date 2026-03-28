@@ -19,10 +19,9 @@ git checkout -b feature/{feature-name}
 
 ### Step 3 — Scaffold Vertical Slice
 
-Detect the framework root (look for `app/` or `src/` directory).
+Detect the framework root (look for `app/` or `src/` directory). Adapt file extensions and layer names to the detected stack:
 
-Create the slice directory with starter files:
-
+**TypeScript/JavaScript** (default):
 ```
 {root}/{feature-name}/
   {feature-name}.route.ts
@@ -31,6 +30,25 @@ Create the slice directory with starter files:
   {feature-name}.schema.ts
   {feature-name}.types.ts
   {feature-name}.test.ts
+```
+
+**PHP/Laravel** (detected via `composer.json`):
+```
+{root}/{Feature}/
+  {Feature}Controller.php
+  {Feature}Service.php
+  {Feature}Repository.php
+  {Feature}Request.php
+  {Feature}Resource.php
+```
+
+**Rust** (detected via `Cargo.toml`):
+```
+src/{feature_name}/
+  mod.rs
+  handler.rs
+  service.rs
+  model.rs
 ```
 
 Each file should contain:
@@ -45,6 +63,8 @@ Launch the `architect` agent:
 > Design an implementation plan for feature "{feature-name}": {description}.
 > The slice has been scaffolded at {slice-path}/.
 > Analyze the existing codebase for patterns to follow and dependencies to wire up.
+
+If the architect agent is not available, produce the plan inline: list files to create/modify, dependencies, implementation sequence, and risks.
 
 ### Step 5 — Report
 

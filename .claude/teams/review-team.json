@@ -1,34 +1,36 @@
 {
   "_description": "Blueprint for parallel code review teams. Three reviewers run simultaneously.",
+  "_requires": "Set CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 in your shell or settings.json env section",
   "_workflow": "Parallel: lead → [security, correctness, style] → lead aggregates",
+  "_usage": "TeamCreate with this blueprint, or reference via /review command",
   "roles": [
     {
       "name": "lead",
-      "role": "Aggregator — collects findings from all reviewers, deduplicates, produces final report",
+      "role": "Aggregator — distributes diff to all reviewers, collects findings, deduplicates, produces final verdict (APPROVE / REQUEST CHANGES)",
       "model": "claude-sonnet-4-6"
     },
     {
       "name": "security-reviewer",
-      "role": "Reviews for: injection, auth bypass, exposed secrets, unsafe input, OWASP top 10",
+      "role": "Reviews for: injection, auth bypass, exposed secrets, unsafe input, OWASP top 10, dependency vulnerabilities",
       "model": "claude-sonnet-4-6",
       "agent": "reviewer"
     },
     {
       "name": "correctness-reviewer",
-      "role": "Reviews for: logic errors, null access, race conditions, missing edge cases, test coverage",
+      "role": "Reviews for: logic errors, null/undefined access, race conditions, missing edge cases, test coverage gaps",
       "model": "claude-sonnet-4-6",
       "agent": "reviewer"
     },
     {
       "name": "style-reviewer",
-      "role": "Reviews for: naming conventions, vertical slice violations, code organization, dead code",
+      "role": "Reviews for: naming conventions, vertical slice violations, code organization, dead code, import ordering",
       "model": "claude-sonnet-4-6",
       "agent": "reviewer"
     }
   ],
   "sequence": [
-    "lead distributes diff to all reviewers",
-    "security, correctness, style review in parallel",
-    "lead aggregates findings, deduplicates, produces final verdict"
+    "1. lead distributes diff and context to all reviewers",
+    "2. security, correctness, and style reviewers run in parallel",
+    "3. lead aggregates findings, deduplicates, and produces final categorized report"
   ]
 }
