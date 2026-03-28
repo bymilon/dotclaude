@@ -8,3 +8,12 @@ CLAUDE.local.md
 
 # Session and runtime data
 *.local.*
+
+# Secrets and credentials (never commit)
+.env
+.env.*
+*.key
+*.pem
+*.p12
+credentials.*
+*secret*

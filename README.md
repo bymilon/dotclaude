@@ -58,6 +58,7 @@ Then open `CLAUDE.md` and replace the `TODO` markers with your project details.
 | Dependency | Required | Install |
 |-----------|----------|---------|
 | Node.js (npx) | Yes | [nodejs.org](https://nodejs.org) |
+| bash | Yes (Windows) | [git-scm.com](https://git-scm.com) (Git Bash) or WSL |
 | memelord | No | `npm i -g memelord` |
 | codemogger | No | `npm i -g codemogger` |
 
@@ -222,7 +223,7 @@ dotclaude is **project-level** configuration. It complements your global `~/.cla
 | Concern | Global (`~/.claude/`) | Project (`.claude/`) |
 |---------|----------------------|---------------------|
 | Rules | Behavior, tool preferences, memory policy | Conventions, architecture, git, testing |
-| Hooks | memelord lifecycle, dream system | Lint gate, test gate, re-index |
+| Hooks | memelord lifecycle | Lint gate, test gate, re-index |
 | MCP | cachebro (global) | cachebro + codemogger (project) |
 | Settings | Model, plugins, environment | Hook registrations, MCP servers, permissions |
 
@@ -232,18 +233,11 @@ Claude Code merges both layers automatically. Project settings take precedence.
 
 ## Contributing
 
-We welcome contributions. Please read [WALKTHROUGH.md](WALKTHROUGH.md) to understand the architecture before submitting changes.
+We welcome contributions. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines, and [WALKTHROUGH.md](WALKTHROUGH.md) to understand the architecture.
 
-### Guidelines
+For security vulnerabilities, see [SECURITY.md](SECURITY.md).
 
-- Follow the conventions in `.claude/rules/` — they apply to this repo too
-- Every new hook must include tool-input guards and handle missing dependencies
-- Every new agent must have scoped tool permissions and a defined output contract
-- Test setup scripts on both Unix and Windows before submitting
-
-### Reporting Issues
-
-Open an issue at [github.com/bymilon/dotclaude/issues](https://github.com/bymilon/dotclaude/issues).
+Open issues at [github.com/bymilon/dotclaude/issues](https://github.com/bymilon/dotclaude/issues).
 
 ---
 

@@ -1,23 +1,26 @@
 #!/usr/bin/env bash
 # pre-push-test.sh — Auto-detect and run tests before git push
-# Hook type: PreToolUse (matcher: Bash matching "git push")
-# Exit 1 to block the push on test failure
+# Hook type: PreToolUse (matcher: Bash)
+# Receives tool input via stdin as JSON
+# Exit 0 to allow, exit 2 to block
 
 set -euo pipefail
 
-# Only run on git push commands — skip all other Bash invocations
-TOOL_INPUT="${1:-}"
-if [[ "$TOOL_INPUT" != *"git push"* ]]; then
+# Read hook input from stdin (Claude Code passes JSON)
+HOOK_INPUT=$(cat)
+
+# Extract the bash command from JSON — portable, no jq dependency
+COMMAND=$(echo "$HOOK_INPUT" | grep -o '"command"[[:space:]]*:[[:space:]]*"[^"]*"' | head -1 | sed 's/.*"command"[[:space:]]*:[[:space:]]*"//;s/"$//')
+
+# Only run on git push commands
+if [[ "$COMMAND" != *"git push"* ]]; then
   exit 0
 fi
 
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 cd "$PROJECT_ROOT"
 
-# --- Detect test runner ---
-
 detect_test_runner() {
-  # JavaScript/TypeScript ecosystem
   if [ -f "package.json" ]; then
     if [ -f "vitest.config.ts" ] || [ -f "vitest.config.js" ] || [ -f "vitest.config.mts" ]; then
       echo "vitest"
@@ -32,7 +35,6 @@ detect_test_runner() {
     else
       echo "none"
     fi
-  # PHP ecosystem
   elif [ -f "composer.json" ]; then
     if [ -f "phpunit.xml" ] || [ -f "phpunit.xml.dist" ]; then
       if grep -q '"pestphp/pest"' composer.json 2>/dev/null || [ -d "vendor/pestphp" ]; then
@@ -43,13 +45,10 @@ detect_test_runner() {
     else
       echo "none"
     fi
-  # Rust
   elif [ -f "Cargo.toml" ]; then
     echo "cargo-test"
-  # Python
   elif [ -f "pyproject.toml" ] || [ -f "pytest.ini" ] || [ -f "setup.py" ]; then
     echo "pytest"
-  # Go
   elif [ -f "go.mod" ]; then
     echo "go-test"
   else
@@ -59,19 +58,17 @@ detect_test_runner() {
 
 TEST_RUNNER=$(detect_test_runner)
 
-# --- Run detected test runner ---
-
 case "$TEST_RUNNER" in
   vitest)
-    echo "[test] Running Vitest..."
+    echo "[test] Running Vitest..." >&2
     npx vitest run
     ;;
   jest)
-    echo "[test] Running Jest..."
+    echo "[test] Running Jest..." >&2
     npx jest
     ;;
   npm-test)
-    echo "[test] Running test script..."
+    echo "[test] Running test script..." >&2
     if command -v bun &>/dev/null; then
       bun test
     else
@@ -79,38 +76,36 @@ case "$TEST_RUNNER" in
     fi
     ;;
   pest)
-    echo "[test] Running Pest..."
+    echo "[test] Running Pest..." >&2
     php artisan test
     ;;
   phpunit)
-    echo "[test] Running PHPUnit..."
+    echo "[test] Running PHPUnit..." >&2
     php vendor/bin/phpunit
     ;;
   cargo-test)
-    echo "[test] Running cargo test..."
+    echo "[test] Running cargo test..." >&2
     cargo test
     ;;
   pytest)
-    echo "[test] Running pytest..."
+    echo "[test] Running pytest..." >&2
     pytest
     ;;
   go-test)
-    echo "[test] Running go test..."
+    echo "[test] Running go test..." >&2
     go test ./...
     ;;
   none)
-    echo "[test] No test runner detected — skipping"
     exit 0
     ;;
   *)
-    echo "[test] Unknown test runner: $TEST_RUNNER"
-    exit 1
+    echo "[test] Unknown test runner: $TEST_RUNNER" >&2
+    exit 2
     ;;
 esac || {
-  echo ""
-  echo "[test] FAILED — fix failing tests before pushing"
-  exit 1
+  echo "[test] FAILED — fix failing tests before pushing" >&2
+  exit 2
 }
 
-echo "[test] passed"
+echo "[test] passed" >&2
 exit 0

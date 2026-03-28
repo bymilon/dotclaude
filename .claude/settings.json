@@ -1,6 +1,5 @@
 {
   "enableAllProjectMcpServers": true,
-  "enabledMcpjsonServers": ["cachebro", "codemogger"],
   "permissions": {
     "allow": []
   },
@@ -9,12 +8,12 @@
       {
         "matcher": "Bash",
         "type": "command",
-        "command": "bash .claude/hooks/pre-commit-lint.sh \"$TOOL_INPUT\""
+        "command": "bash .claude/hooks/pre-commit-lint.sh"
       },
       {
         "matcher": "Bash",
         "type": "command",
-        "command": "bash .claude/hooks/pre-push-test.sh \"$TOOL_INPUT\""
+        "command": "bash .claude/hooks/pre-push-test.sh"
       }
     ],
     "PostToolUse": [

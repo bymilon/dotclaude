@@ -2,7 +2,7 @@
 name: refactorer
 description: Atomic refactoring agent that simplifies code while preserving behavior, reverts if tests fail
 model: claude-sonnet-4-6
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash(*)
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash(git:*), Bash(npm:*), Bash(npx:*), Bash(bun:*), Bash(php:*), Bash(cargo:*), Bash(pytest:*), Bash(go:*)
 ---
 
 # Refactorer Agent

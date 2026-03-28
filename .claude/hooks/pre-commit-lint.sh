@@ -1,23 +1,26 @@
 #!/usr/bin/env bash
 # pre-commit-lint.sh — Auto-detect and run linter before git commit
-# Hook type: PreToolUse (matcher: Bash matching "git commit")
-# Exit 1 to block the commit on lint failure
+# Hook type: PreToolUse (matcher: Bash)
+# Receives tool input via stdin as JSON
+# Exit 0 to allow, exit 2 to block
 
 set -euo pipefail
 
-# Only run on git commit commands — skip all other Bash invocations
-TOOL_INPUT="${1:-}"
-if [[ "$TOOL_INPUT" != *"git commit"* ]]; then
+# Read hook input from stdin (Claude Code passes JSON)
+HOOK_INPUT=$(cat)
+
+# Extract the bash command from JSON — portable, no jq dependency
+COMMAND=$(echo "$HOOK_INPUT" | grep -o '"command"[[:space:]]*:[[:space:]]*"[^"]*"' | head -1 | sed 's/.*"command"[[:space:]]*:[[:space:]]*"//;s/"$//')
+
+# Only run on git commit commands
+if [[ "$COMMAND" != *"git commit"* ]]; then
   exit 0
 fi
 
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 cd "$PROJECT_ROOT"
 
-# --- Detect linter ---
-
 detect_linter() {
-  # JavaScript/TypeScript ecosystem
   if [ -f "biome.json" ] || [ -f "biome.jsonc" ]; then
     echo "biome"
   elif [ -f "package.json" ]; then
@@ -32,7 +35,6 @@ detect_linter() {
     else
       echo "none"
     fi
-  # PHP ecosystem
   elif [ -f "composer.json" ]; then
     if [ -f "pint.json" ] || [ -d "vendor/laravel/pint" ]; then
       echo "pint"
@@ -41,10 +43,8 @@ detect_linter() {
     else
       echo "none"
     fi
-  # Rust
   elif [ -f "Cargo.toml" ]; then
     echo "clippy"
-  # Python
   elif [ -f "pyproject.toml" ] || [ -f "ruff.toml" ]; then
     if command -v ruff &>/dev/null; then
       echo "ruff"
@@ -53,7 +53,6 @@ detect_linter() {
     else
       echo "none"
     fi
-  # Go
   elif [ -f "go.mod" ]; then
     echo "gofmt"
   else
@@ -63,23 +62,21 @@ detect_linter() {
 
 LINTER=$(detect_linter)
 
-# --- Run detected linter ---
-
 case "$LINTER" in
   biome)
-    echo "[lint] Running Biome..."
+    echo "[lint] Running Biome..." >&2
     npx @biomejs/biome check --write .
     ;;
   eslint)
-    echo "[lint] Running ESLint..."
+    echo "[lint] Running ESLint..." >&2
     npx eslint --fix .
     ;;
   prettier)
-    echo "[lint] Running Prettier..."
+    echo "[lint] Running Prettier..." >&2
     npx prettier --write --check .
     ;;
   npm-lint)
-    echo "[lint] Running lint script..."
+    echo "[lint] Running lint script..." >&2
     if command -v bun &>/dev/null; then
       bun run lint
     else
@@ -87,42 +84,40 @@ case "$LINTER" in
     fi
     ;;
   pint)
-    echo "[lint] Running Laravel Pint..."
+    echo "[lint] Running Laravel Pint..." >&2
     php vendor/bin/pint --dirty
     ;;
   php-cs-fixer)
-    echo "[lint] Running PHP CS Fixer..."
+    echo "[lint] Running PHP CS Fixer..." >&2
     php vendor/bin/php-cs-fixer fix --dry-run --diff
     ;;
   clippy)
-    echo "[lint] Running cargo clippy..."
+    echo "[lint] Running cargo clippy..." >&2
     cargo clippy --fix --allow-dirty --allow-staged
     ;;
   ruff)
-    echo "[lint] Running ruff..."
+    echo "[lint] Running ruff..." >&2
     ruff check --fix .
     ;;
   black)
-    echo "[lint] Running black..."
+    echo "[lint] Running black..." >&2
     black --check .
     ;;
   gofmt)
-    echo "[lint] Running gofmt..."
+    echo "[lint] Running gofmt..." >&2
     gofmt -l -w .
     ;;
   none)
-    echo "[lint] No linter detected — skipping"
     exit 0
     ;;
   *)
-    echo "[lint] Unknown linter: $LINTER"
-    exit 1
+    echo "[lint] Unknown linter: $LINTER" >&2
+    exit 2
     ;;
 esac || {
-  echo ""
-  echo "[lint] FAILED — fix lint errors before committing"
-  exit 1
+  echo "[lint] FAILED — fix lint errors before committing" >&2
+  exit 2
 }
 
-echo "[lint] passed"
+echo "[lint] passed" >&2
 exit 0

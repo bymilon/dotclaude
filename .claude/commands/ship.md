@@ -24,9 +24,10 @@ Run the test suite. If tests fail, **stop and report** which tests failed. If no
 
 ### Step 3 — Stage + Commit
 
-1. Stage all modified and new files: `git add -A`
-2. Review staged changes: `git diff --staged --stat`
-3. Generate a conventional commit message from the diff:
+1. Stage tracked changes: `git add -u`
+2. Check for untracked files with `git status --porcelain`. If any exist, review them — **never stage files matching**: `.env*`, `*.key`, `*.pem`, `*.p12`, `credentials.*`, `*secret*`, `*.sqlite`, `*.db`. Stage safe untracked files individually.
+3. Review staged changes: `git diff --staged --stat`
+4. Generate a conventional commit message from the diff:
    - Determine type: feat/fix/refactor/docs/test/chore
    - Write concise subject line (imperative, under 72 chars)
    - If a commit message was provided as argument, use it as the subject

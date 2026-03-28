@@ -28,7 +28,7 @@ while [[ $# -gt 0 ]]; do
       echo "  --dry-run  Preview actions without executing them"
       exit 0
       ;;
-    *) shift ;;
+    *) error "Unknown flag: $1. Usage: ./setup.sh [--dry-run]" ;;
   esac
 done
 

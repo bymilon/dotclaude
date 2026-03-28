@@ -2,6 +2,7 @@
 # Mirror of setup.sh — keep both scripts in sync
 # Usage: .\setup.ps1 [-DryRun]
 
+[CmdletBinding()]
 param(
     [switch]$DryRun,
     [switch]$Help
@@ -45,6 +46,9 @@ $missing = @()
 $optionalMissing = @()
 
 if (-not (Get-Command npx -ErrorAction SilentlyContinue)) { $missing += "npx (Node.js)" }
+if (-not (Get-Command bash -ErrorAction SilentlyContinue)) {
+    Warn "bash not found — hooks require Git Bash or WSL. Install Git for Windows: https://git-scm.com"
+}
 if (-not (Get-Command memelord -ErrorAction SilentlyContinue)) { $optionalMissing += "memelord" }
 if (-not (Get-Command codemogger -ErrorAction SilentlyContinue)) { $optionalMissing += "codemogger" }
 
