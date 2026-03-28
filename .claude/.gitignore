@@ -1,0 +1,7 @@
+# Personal settings (never commit)
+settings.local.json
+*.local.*
+
+# Memelord internal state
+.mind.mv2*
+mind.mv2*

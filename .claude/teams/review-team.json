@@ -1,0 +1,34 @@
+{
+  "_description": "Blueprint for parallel code review teams. Three reviewers run simultaneously.",
+  "_workflow": "Parallel: lead → [security, correctness, style] → lead aggregates",
+  "roles": [
+    {
+      "name": "lead",
+      "role": "Aggregator — collects findings from all reviewers, deduplicates, produces final report",
+      "model": "claude-sonnet-4-6"
+    },
+    {
+      "name": "security-reviewer",
+      "role": "Reviews for: injection, auth bypass, exposed secrets, unsafe input, OWASP top 10",
+      "model": "claude-sonnet-4-6",
+      "agent": "reviewer"
+    },
+    {
+      "name": "correctness-reviewer",
+      "role": "Reviews for: logic errors, null access, race conditions, missing edge cases, test coverage",
+      "model": "claude-sonnet-4-6",
+      "agent": "reviewer"
+    },
+    {
+      "name": "style-reviewer",
+      "role": "Reviews for: naming conventions, vertical slice violations, code organization, dead code",
+      "model": "claude-sonnet-4-6",
+      "agent": "reviewer"
+    }
+  ],
+  "sequence": [
+    "lead distributes diff to all reviewers",
+    "security, correctness, style review in parallel",
+    "lead aggregates findings, deduplicates, produces final verdict"
+  ]
+}
