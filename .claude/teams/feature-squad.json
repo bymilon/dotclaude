@@ -1,35 +1,37 @@
 {
   "_description": "Blueprint for feature development teams. Use with TeamCreate or /kickoff.",
+  "_requires": "Set CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 in your shell or settings.json env section",
   "_workflow": "Sequential: architect → implementer → tester → lead review gate",
+  "_usage": "TeamCreate with this blueprint, or reference via /kickoff command",
   "roles": [
     {
       "name": "lead",
-      "role": "Coordinator — breaks down the feature, assigns tasks, reviews final output",
+      "role": "Coordinator — breaks down the feature, assigns tasks, reviews final output. Gates quality before merge.",
       "model": "claude-sonnet-4-6"
     },
     {
       "name": "architect",
-      "role": "Plans implementation using .claude/agents/architect.md. Read-only. Produces file list and sequence.",
+      "role": "Plans implementation using .claude/agents/architect.md. Read-only. Produces file list, dependencies, sequence, and risks.",
       "model": "claude-sonnet-4-6",
       "agent": "architect"
     },
     {
       "name": "implementer",
-      "role": "Writes code following the architect's plan. Creates slices, routes, services, repos.",
+      "role": "Writes code following the architect's plan. Creates slices, routes, services, repos. Runs in worktree isolation.",
       "model": "claude-sonnet-4-6"
     },
     {
       "name": "tester",
-      "role": "Writes and runs tests using .claude/agents/tester.md. Co-located test files.",
+      "role": "Writes and runs tests using .claude/agents/tester.md. Co-located test files. Verifies all tests pass before handoff.",
       "model": "claude-sonnet-4-6",
       "agent": "tester"
     }
   ],
   "sequence": [
-    "architect produces plan",
-    "lead reviews and approves plan",
-    "implementer builds feature",
-    "tester writes and runs tests",
-    "lead performs final review"
+    "1. architect produces structured implementation plan",
+    "2. lead reviews and approves plan (gates before implementation)",
+    "3. implementer builds feature following the plan",
+    "4. tester writes co-located tests and runs full suite",
+    "5. lead performs final review — approves or requests changes"
   ]
 }

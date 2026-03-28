@@ -22,6 +22,8 @@ Launch the `reviewer` agent with this context:
 > Use the project rules in `.claude/rules/` as your standard.
 > Output categorized findings: Critical / Warning / Suggestion.
 
+If the reviewer agent is not available (e.g., agent spawning disabled), perform the review inline using the same criteria and output format.
+
 ### Step 3 — Present Results
 
 Display the reviewer agent's findings directly. Add a summary line:

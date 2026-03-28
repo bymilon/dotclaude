@@ -1,7 +1,27 @@
 {
   "enableAllProjectMcpServers": true,
-  "enabledMcpjsonServers": ["cachebro", "codemogger"],
   "permissions": {
     "allow": []
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "type": "command",
+        "command": "bash .claude/hooks/pre-commit-lint.sh"
+      },
+      {
+        "matcher": "Bash",
+        "type": "command",
+        "command": "bash .claude/hooks/pre-push-test.sh"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "type": "command",
+        "command": "bash .claude/hooks/post-index-update.sh"
+      }
+    ]
   }
 }

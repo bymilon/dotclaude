@@ -30,9 +30,11 @@ Explore the codebase systematically and produce a structured overview. Do not mo
 
 ### Step 4 — Check MCP Stack
 
-1. memelord: check if `.memelord/` exists (memory initialized?)
-2. codemogger: check if `.codemogger/` exists (code indexed?)
-3. cachebro: already active if listed in `.mcp.json`
+Check each tool and report status. **If a tool is missing or not installed, log a warning and continue** — the template works without MCP tools, they just enhance it.
+
+1. cachebro: check if listed in `.mcp.json` → `active` or `not configured`
+2. codemogger: check if `.codemogger/` exists → `indexed` or `needs indexing`. If `codemogger` command not found → `not installed (optional: npm i -g codemogger)`
+3. memelord: check if `.memelord/` exists → `initialized` or `needs init`. If `memelord` command not found → `not installed (optional: npm i -g memelord)`
 
 ### Output
 

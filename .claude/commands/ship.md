@@ -12,29 +12,22 @@ Execute the following steps in order. Stop at any failure.
 
 ### Step 1 — Lint
 
-Auto-detect the linter from project manifests:
-- `package.json` → look for `lint` script, or run `npx eslint . --fix` / `npx prettier --write .`
-- `composer.json` → `php vendor/bin/pint --dirty`
-- `Cargo.toml` → `cargo clippy --fix --allow-dirty`
-- `pyproject.toml` → `ruff check --fix .`
+Auto-detect the linter using the same logic as `.claude/hooks/pre-commit-lint.sh` (detects Biome, ESLint, Prettier, Pint, Clippy, Ruff, Black, gofmt from manifest files).
 
-Run the linter. If it auto-fixes files, stage the fixes. If lint fails after auto-fix, **stop and report**.
+Run the linter. If it auto-fixes files, stage the fixes. If lint fails after auto-fix, **stop and report**. If no linter detected, **warn and continue**.
 
 ### Step 2 — Test
 
-Auto-detect the test runner:
-- `package.json` → `bun test` or `npx vitest run` or `npx jest`
-- `composer.json` → `php artisan test` or `php vendor/bin/phpunit`
-- `Cargo.toml` → `cargo test`
-- `pyproject.toml` → `pytest`
+Auto-detect the test runner using the same logic as `.claude/hooks/pre-push-test.sh` (detects Vitest, Jest, Pest, PHPUnit, Cargo, pytest, Go test from manifest files).
 
-Run the test suite. If tests fail, **stop and report** which tests failed.
+Run the test suite. If tests fail, **stop and report** which tests failed. If no test runner detected, **warn and continue**.
 
 ### Step 3 — Stage + Commit
 
-1. Stage all modified and new files: `git add -A`
-2. Review staged changes: `git diff --staged --stat`
-3. Generate a conventional commit message from the diff:
+1. Stage tracked changes: `git add -u`
+2. Check for untracked files with `git status --porcelain`. If any exist, review them — **never stage files matching**: `.env*`, `*.key`, `*.pem`, `*.p12`, `credentials.*`, `*secret*`, `*.sqlite`, `*.db`. Stage safe untracked files individually.
+3. Review staged changes: `git diff --staged --stat`
+4. Generate a conventional commit message from the diff:
    - Determine type: feat/fix/refactor/docs/test/chore
    - Write concise subject line (imperative, under 72 chars)
    - If a commit message was provided as argument, use it as the subject
