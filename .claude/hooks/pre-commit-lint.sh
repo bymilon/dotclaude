@@ -23,8 +23,12 @@ cd "$PROJECT_ROOT"
 detect_linter() {
   if [ -f "biome.json" ] || [ -f "biome.jsonc" ]; then
     echo "biome"
+  elif [ -f ".oxlintrc.json" ] || [ -f "oxlint.json" ]; then
+    echo "oxlint"
   elif [ -f "package.json" ]; then
-    if [ -f ".eslintrc" ] || [ -f ".eslintrc.js" ] || [ -f ".eslintrc.json" ] || [ -f ".eslintrc.cjs" ] || [ -f "eslint.config.js" ] || [ -f "eslint.config.mjs" ] || [ -f "eslint.config.ts" ]; then
+    if grep -q '"oxlint"' package.json 2>/dev/null; then
+      echo "oxlint"
+    elif [ -f ".eslintrc" ] || [ -f ".eslintrc.js" ] || [ -f ".eslintrc.json" ] || [ -f ".eslintrc.cjs" ] || [ -f "eslint.config.js" ] || [ -f "eslint.config.mjs" ] || [ -f "eslint.config.ts" ]; then
       echo "eslint"
     elif grep -q '"eslint"' package.json 2>/dev/null; then
       echo "eslint"
@@ -66,6 +70,10 @@ case "$LINTER" in
   biome)
     echo "[lint] Running Biome..." >&2
     npx @biomejs/biome check --write .
+    ;;
+  oxlint)
+    echo "[lint] Running oxlint..." >&2
+    npx oxlint .
     ;;
   eslint)
     echo "[lint] Running ESLint..." >&2

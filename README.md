@@ -139,6 +139,7 @@ Hooks and commands detect your stack automatically. No configuration required.
 
 | Manifest | Ecosystem | Linter | Test Runner |
 |----------|-----------|--------|-------------|
+| `.oxlintrc.json` | JavaScript / TypeScript | oxlint | -- |
 | `biome.json` | JavaScript / TypeScript | Biome | -- |
 | `package.json` + `eslint.config.*` | JavaScript / TypeScript | ESLint | Vitest / Jest |
 | `composer.json` + `pint.json` | PHP | Pint | Pest / PHPUnit |
