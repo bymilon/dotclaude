@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # dotclaude setup — bootstrap the three-layer MCP stack for this project
+# Mirror of setup.ps1 — keep both scripts in sync
 # Usage: ./setup.sh [--dry-run]
 
 set -euo pipefail
@@ -72,7 +73,7 @@ info "Prerequisites checked."
 
 # ─── Step 2: Initialize memelord ─────────────────────────────
 
-if command -v memelord &>/dev/null; then
+if [[ ! " ${OPTIONAL_MISSING[*]} " =~ " memelord " ]]; then
   if [ -d ".memelord" ]; then
     info "memelord already initialized — skipping"
   else
@@ -86,7 +87,7 @@ fi
 
 # ─── Step 3: Build codemogger index ──────────────────────────
 
-if command -v codemogger &>/dev/null; then
+if [[ ! " ${OPTIONAL_MISSING[*]} " =~ " codemogger " ]]; then
   if [ -d ".codemogger" ]; then
     info "codemogger index exists — rebuilding..."
   else
@@ -117,11 +118,7 @@ fi
 if [ -f "CLAUDE.local.md" ]; then
   info "CLAUDE.local.md already exists — skipping"
 else
-  if [ $DRY_RUN -eq 1 ]; then
-    echo -e "  ${YELLOW}[dry-run]${NC} would copy CLAUDE.local.md.example → CLAUDE.local.md"
-  else
-    cp "CLAUDE.local.md.example" "CLAUDE.local.md" 2>/dev/null || true
-  fi
+  run cp "CLAUDE.local.md.example" "CLAUDE.local.md"
   info "Created CLAUDE.local.md from example."
 fi
 
@@ -132,11 +129,7 @@ ENTRIES=("CLAUDE.local.md" ".memelord/" ".codemogger/" ".cachebro/")
 
 for entry in "${ENTRIES[@]}"; do
   if ! grep -qF "$entry" "$GITIGNORE" 2>/dev/null; then
-    if [ $DRY_RUN -eq 1 ]; then
-      echo -e "  ${YELLOW}[dry-run]${NC} would append '$entry' to .gitignore"
-    else
-      echo "$entry" >> "$GITIGNORE"
-    fi
+    run bash -c "echo '$entry' >> '$GITIGNORE'"
   fi
 done
 
@@ -144,11 +137,7 @@ info ".gitignore verified."
 
 # ─── Step 6: Set hook permissions ────────────────────────────
 
-if [ $DRY_RUN -eq 1 ]; then
-  echo -e "  ${YELLOW}[dry-run]${NC} would chmod +x .claude/hooks/*.sh"
-else
-  chmod +x .claude/hooks/*.sh 2>/dev/null || true
-fi
+run chmod +x .claude/hooks/*.sh
 info "Hook scripts made executable."
 
 # ─── Done ────────────────────────────────────────────────────

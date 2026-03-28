@@ -5,6 +5,12 @@
 
 set -euo pipefail
 
+# Only run on git commit commands — skip all other Bash invocations
+TOOL_INPUT="${1:-}"
+if [[ "$TOOL_INPUT" != *"git commit"* ]]; then
+  exit 0
+fi
+
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 cd "$PROJECT_ROOT"
 
@@ -108,15 +114,15 @@ case "$LINTER" in
     echo "[lint] No linter detected — skipping"
     exit 0
     ;;
-esac
-
-LINT_EXIT=$?
-
-if [ $LINT_EXIT -ne 0 ]; then
+  *)
+    echo "[lint] Unknown linter: $LINTER"
+    exit 1
+    ;;
+esac || {
   echo ""
   echo "[lint] FAILED — fix lint errors before committing"
   exit 1
-fi
+}
 
 echo "[lint] passed"
 exit 0

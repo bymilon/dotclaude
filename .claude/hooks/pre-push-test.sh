@@ -5,6 +5,12 @@
 
 set -euo pipefail
 
+# Only run on git push commands — skip all other Bash invocations
+TOOL_INPUT="${1:-}"
+if [[ "$TOOL_INPUT" != *"git push"* ]]; then
+  exit 0
+fi
+
 PROJECT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 cd "$PROJECT_ROOT"
 
@@ -96,15 +102,15 @@ case "$TEST_RUNNER" in
     echo "[test] No test runner detected — skipping"
     exit 0
     ;;
-esac
-
-TEST_EXIT=$?
-
-if [ $TEST_EXIT -ne 0 ]; then
+  *)
+    echo "[test] Unknown test runner: $TEST_RUNNER"
+    exit 1
+    ;;
+esac || {
   echo ""
   echo "[test] FAILED — fix failing tests before pushing"
   exit 1
-fi
+}
 
 echo "[test] passed"
 exit 0

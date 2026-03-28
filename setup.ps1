@@ -1,4 +1,5 @@
 # dotclaude setup — bootstrap the three-layer MCP stack (Windows PowerShell)
+# Mirror of setup.sh — keep both scripts in sync
 # Usage: .\setup.ps1 [-DryRun]
 
 param(

@@ -12,34 +12,13 @@ Execute the following steps in order. Stop at any failure.
 
 ### Step 1 — Lint
 
-Auto-detect the linter (same logic as `pre-commit-lint.sh`):
-
-| Stack | Detection | Command |
-|-------|-----------|---------|
-| JS/TS | `biome.json` | `npx @biomejs/biome check --write .` |
-| JS/TS | `.eslintrc*` or `eslint.config.*` | `npx eslint --fix .` |
-| JS/TS | `"lint"` script in package.json | `bun run lint` / `npm run lint` |
-| PHP | `pint.json` or `vendor/laravel/pint` | `php vendor/bin/pint --dirty` |
-| Rust | `Cargo.toml` | `cargo clippy --fix --allow-dirty` |
-| Python | `pyproject.toml` + ruff installed | `ruff check --fix .` |
-| Go | `go.mod` | `gofmt -l -w .` |
+Auto-detect the linter using the same logic as `.claude/hooks/pre-commit-lint.sh` (detects Biome, ESLint, Prettier, Pint, Clippy, Ruff, Black, gofmt from manifest files).
 
 Run the linter. If it auto-fixes files, stage the fixes. If lint fails after auto-fix, **stop and report**. If no linter detected, **warn and continue**.
 
 ### Step 2 — Test
 
-Auto-detect the test runner (same logic as `pre-push-test.sh`):
-
-| Stack | Detection | Command |
-|-------|-----------|---------|
-| JS/TS | `vitest.config.*` | `npx vitest run` |
-| JS/TS | `jest.config.*` | `npx jest` |
-| JS/TS | `"test"` script in package.json | `bun test` / `npm test` |
-| PHP | Pest in composer.json | `php artisan test` |
-| PHP | PHPUnit only | `php vendor/bin/phpunit` |
-| Rust | `Cargo.toml` | `cargo test` |
-| Python | `pyproject.toml` / `pytest.ini` | `pytest` |
-| Go | `go.mod` | `go test ./...` |
+Auto-detect the test runner using the same logic as `.claude/hooks/pre-push-test.sh` (detects Vitest, Jest, Pest, PHPUnit, Cargo, pytest, Go test from manifest files).
 
 Run the test suite. If tests fail, **stop and report** which tests failed. If no test runner detected, **warn and continue**.
 
