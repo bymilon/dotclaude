@@ -5,6 +5,7 @@ CLAUDE.local.md
 .memelord/
 .codemogger/
 .cachebro/
+.me/
 
 # Session and runtime data
 *.local.*
