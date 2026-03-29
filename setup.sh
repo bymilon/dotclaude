@@ -55,7 +55,7 @@ info "Checking prerequisites..."
 MISSING=()
 OPTIONAL_MISSING=()
 
-command -v npx &>/dev/null || MISSING+=("npx (Node.js)")
+command -v bun &>/dev/null || MISSING+=("bun (https://bun.sh)")
 command -v memelord  &>/dev/null || OPTIONAL_MISSING+=("memelord")
 command -v codemogger &>/dev/null || OPTIONAL_MISSING+=("codemogger")
 
@@ -65,7 +65,7 @@ fi
 
 if [ ${#OPTIONAL_MISSING[@]} -gt 0 ]; then
   warn "Optional tools not found: ${OPTIONAL_MISSING[*]}"
-  warn "Install with: npm install -g ${OPTIONAL_MISSING[*]}"
+  warn "Install with: bun add -g ${OPTIONAL_MISSING[*]}"
   warn "Continuing without them — the template still works, MCP features will be limited."
 fi
 
@@ -159,6 +159,6 @@ echo ""
 
 if [ ${#OPTIONAL_MISSING[@]} -gt 0 ]; then
   warn "Reminder: install optional tools for full functionality:"
-  warn "  npm install -g ${OPTIONAL_MISSING[*]}"
+  warn "  bun add -g ${OPTIONAL_MISSING[*]}"
   echo ""
 fi

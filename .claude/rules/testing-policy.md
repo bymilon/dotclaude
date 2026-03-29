@@ -50,9 +50,9 @@ Auto-detected by the `pre-push-test.sh` hook. The hook checks for config files i
 
 | Stack | Detection | Command |
 |-------|-----------|---------|
-| JS/TS | `vitest.config.*` or `"vitest"` in package.json | `npx vitest run` |
-| JS/TS | `jest.config.*` or `"jest"` in package.json | `npx jest` |
-| JS/TS | `"test"` script in package.json | `bun test` / `npm test` |
+| JS/TS | `vitest.config.*` or `"vitest"` in package.json | `bunx vitest run` |
+| JS/TS | `jest.config.*` or `"jest"` in package.json | `bunx jest` |
+| JS/TS | `"test"` script in package.json | `bun test` |
 | PHP | `phpunit.xml` + `pestphp/pest` in composer.json | `php artisan test` |
 | PHP | `phpunit.xml` without Pest | `php vendor/bin/phpunit` |
 | Rust | `Cargo.toml` | `cargo test` |

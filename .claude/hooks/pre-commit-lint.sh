@@ -69,27 +69,23 @@ LINTER=$(detect_linter)
 case "$LINTER" in
   biome)
     echo "[lint] Running Biome..." >&2
-    npx @biomejs/biome check --write .
+    bunx @biomejs/biome check --write .
     ;;
   oxlint)
     echo "[lint] Running oxlint..." >&2
-    npx oxlint .
+    bunx oxlint .
     ;;
   eslint)
     echo "[lint] Running ESLint..." >&2
-    npx eslint --fix .
+    bunx eslint --fix .
     ;;
   prettier)
     echo "[lint] Running Prettier..." >&2
-    npx prettier --write --check .
+    bunx prettier --write --check .
     ;;
   npm-lint)
     echo "[lint] Running lint script..." >&2
-    if command -v bun &>/dev/null; then
-      bun run lint
-    else
-      npm run lint
-    fi
+    bun run lint
     ;;
   pint)
     echo "[lint] Running Laravel Pint..." >&2

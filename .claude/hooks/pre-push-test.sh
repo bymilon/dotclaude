@@ -61,19 +61,15 @@ TEST_RUNNER=$(detect_test_runner)
 case "$TEST_RUNNER" in
   vitest)
     echo "[test] Running Vitest..." >&2
-    npx vitest run
+    bunx vitest run
     ;;
   jest)
     echo "[test] Running Jest..." >&2
-    npx jest
+    bunx jest
     ;;
   npm-test)
     echo "[test] Running test script..." >&2
-    if command -v bun &>/dev/null; then
-      bun test
-    else
-      npm test
-    fi
+    bun test
     ;;
   pest)
     echo "[test] Running Pest..." >&2
