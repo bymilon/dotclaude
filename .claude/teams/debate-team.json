@@ -1,0 +1,33 @@
+{
+  "_description": "Red/Blue adversarial debate for architecture, API design, and high-stakes decisions. Proposer designs, challenger attacks, proposer defends, judge rules.",
+  "_requires": "Set CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 in settings.json env section",
+  "_workflow": "Sequential rounds: proposer → challenger → defender → judge synthesis",
+  "_usage": "Reference via /debate command. Use for decisions where a single agent's blind spots could cause rework.",
+  "_pattern": "Stochastic Debate — exploits LLM stochasticity to generate genuinely adversarial perspectives",
+  "roles": [
+    {
+      "name": "judge",
+      "role": "Moderator and final decision maker. Runs the debate in rounds, passes context between agents, evaluates quality of arguments, and produces a final ruling with explicit rationale. Does NOT take sides. Scores each objection as: VALID (proposal must change), PARTIAL (proposal should note the risk), INVALID (proposer's defense holds).",
+      "model": "claude-sonnet-4-6"
+    },
+    {
+      "name": "proposer",
+      "role": "Blue team. Designs a concrete solution to the stated problem. Must be specific — no vague abstractions. Produces: approach, key decisions made, trade-offs accepted, risks acknowledged. In the defense round, responds to each challenger objection directly: concede and revise, or defend with evidence.",
+      "model": "claude-sonnet-4-6",
+      "agent": "architect"
+    },
+    {
+      "name": "challenger",
+      "role": "Red team. Receives the proposer's design and MUST find real weaknesses. Not a nitpicker — focus on: correctness failures, scalability cliffs, security holes, missing edge cases, wrong assumptions about the environment. Must produce at least 3 specific objections with concrete failure scenarios. Cannot say 'looks good'.",
+      "model": "claude-sonnet-4-6",
+      "agent": "reviewer"
+    }
+  ],
+  "sequence": [
+    "1. judge presents the problem to proposer with full context",
+    "2. proposer produces a concrete solution proposal (blue team)",
+    "3. judge passes proposal to challenger — challenger must attack it (red team)",
+    "4. judge passes challenger objections back to proposer — proposer defends or concedes each one",
+    "5. judge scores each objection (VALID/PARTIAL/INVALID), synthesizes final ruling, produces the revised proposal incorporating all VALID/PARTIAL findings"
+  ]
+}

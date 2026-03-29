@@ -33,8 +33,11 @@ Explore the codebase systematically and produce a structured overview. Do not mo
 Check each tool and report status. **If a tool is missing or not installed, log a warning and continue** — the template works without MCP tools, they just enhance it.
 
 1. cachebro: check if listed in `.mcp.json` → `active` or `not configured`
-2. codemogger: check if `.codemogger/` exists → `indexed` or `needs indexing`. If `codemogger` command not found → `not installed (optional: npm i -g codemogger)`
-3. memelord: check if `.memelord/` exists → `initialized` or `needs init`. If `memelord` command not found → `not installed (optional: npm i -g memelord)`
+2. codemogger: check if `.codemogger/` exists → `indexed` or `needs indexing`. If `codemogger` command not found → `not installed (optional: bun add -g codemogger)`
+3. memelord: check if `.memelord/` exists → `initialized` or `needs init`. If `memelord` command not found → `not installed (optional: bun add -g memelord)`
+4. context-mode: check if `ctx_batch_execute` MCP tool is available → `active` or `not configured`
+5. opensrc: check if `opensrc/` directory exists → `present ({N} packages)` or `not fetched (run setup.sh)`
+6. rust-src: check if `rust-src/` directory exists → `present ({N} crates)` or `not fetched (run setup.sh)`
 
 ### Output
 
@@ -58,9 +61,14 @@ Produce a structured summary:
 - {pattern observed} — {example}
 
 ## MCP Status
-- cachebro: {active/missing}
-- codemogger: {indexed/needs indexing}
-- memelord: {initialized/needs init}
+- cachebro:     {active/missing}
+- codemogger:   {indexed/needs indexing}
+- memelord:     {initialized/needs init}
+- context-mode: {active/not configured}
+
+## Source Context
+- opensrc/:  {present (N packages)/not fetched}
+- rust-src/: {present (N crates)/not fetched}
 
 ## Recommendations
 - {any setup steps needed}

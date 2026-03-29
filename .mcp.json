@@ -1,12 +1,12 @@
 {
   "mcpServers": {
     "cachebro": {
-      "command": "npx",
-      "args": ["cachebro", "serve"]
+      "command": "cmd",
+      "args": ["/c", "bunx", "cachebro", "serve"]
     },
     "codemogger": {
-      "command": "codemogger",
-      "args": ["mcp"]
+      "command": "cmd",
+      "args": ["/c", "codemogger", "mcp"]
     }
   }
 }

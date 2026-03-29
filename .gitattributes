@@ -1,0 +1,23 @@
+# Enforce LF for shell scripts — prevents CRLF corruption on Windows (bad interpreter errors)
+*.sh text eol=lf
+
+# Windows scripts use CRLF
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# All other text files: normalize to LF in repo, autocrlf handles checkout
+*.md text eol=lf
+*.json text eol=lf
+*.ts text eol=lf
+*.js text eol=lf
+*.toml text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+
+# Binaries — no line ending conversion
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.wasm binary

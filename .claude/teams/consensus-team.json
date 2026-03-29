@@ -1,0 +1,38 @@
+{
+  "_description": "Stochastic consensus — 3 independent architects propose solutions to the same problem, synthesizer identifies agreement zones (high confidence) and divergence zones (needs human input).",
+  "_requires": "Set CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 in settings.json env section",
+  "_workflow": "Parallel: [architect-a, architect-b, architect-c] independent proposals → synthesizer consensus map",
+  "_usage": "Reference via /consensus command. Use for irreversible decisions: DB schema, API contracts, auth design, core data models.",
+  "_pattern": "Stochastic Ensemble — same prompt, independent stochastic paths, consensus = confidence signal",
+  "roles": [
+    {
+      "name": "synthesizer",
+      "role": "Receives all three independent proposals. Maps them to a consensus report: AGREED (all three aligned — implement with confidence), MAJORITY (2/3 aligned — note the minority view), SPLIT (all three diverged — surface to human for decision). Does not pick a winner. Produces a consensus map with specific decision points, not a narrative summary.",
+      "model": "claude-sonnet-4-6"
+    },
+    {
+      "name": "architect-a",
+      "role": "Independently designs a solution to the stated problem. Has NO visibility into what other architects will propose. Produces: approach, file structure, key interfaces, sequence. Be concrete and specific.",
+      "model": "claude-sonnet-4-6",
+      "agent": "architect"
+    },
+    {
+      "name": "architect-b",
+      "role": "Independently designs a solution to the stated problem. Has NO visibility into what other architects will propose. Produces: approach, file structure, key interfaces, sequence. Be concrete and specific.",
+      "model": "claude-sonnet-4-6",
+      "agent": "architect"
+    },
+    {
+      "name": "architect-c",
+      "role": "Independently designs a solution to the stated problem. Has NO visibility into what other architects will propose. Produces: approach, file structure, key interfaces, sequence. Be concrete and specific.",
+      "model": "claude-sonnet-4-6",
+      "agent": "architect"
+    }
+  ],
+  "sequence": [
+    "1. synthesizer distributes the problem to all three architects simultaneously (parallel)",
+    "2. architect-a, architect-b, architect-c produce independent proposals with no cross-visibility",
+    "3. synthesizer receives all three proposals and maps each decision point: AGREED / MAJORITY / SPLIT",
+    "4. synthesizer outputs consensus map — AGREED items go to implementation, SPLIT items escalate to human"
+  ]
+}

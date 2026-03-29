@@ -22,15 +22,18 @@ COUNT=$(wc -c < "$STATE_FILE" 2>/dev/null || echo 0)
 
 # Re-index after threshold edits
 if [ "$COUNT" -ge "$THRESHOLD" ]; then
-  # Skip if a reindex is already running
-  if [ -f "$LOCK_FILE" ] && kill -0 "$(cat "$LOCK_FILE" 2>/dev/null)" 2>/dev/null; then
-    exit 0
+  # Skip if a reindex ran in the last 60s (Windows-safe: no kill -0)
+  if [ -f "$LOCK_FILE" ]; then
+    LOCK_AGE=$(( $(date +%s) - $(date +%s -r "$LOCK_FILE" 2>/dev/null || echo 0) ))
+    if [ "$LOCK_AGE" -lt 60 ]; then
+      exit 0
+    fi
   fi
 
   echo "[codemogger] Re-indexing after $COUNT file changes..."
   : > "$STATE_FILE"
+  touch "$LOCK_FILE"
   cd "$PROJECT_ROOT" && codemogger index . --quiet &
-  echo $! > "$LOCK_FILE"
 fi
 
 exit 0

@@ -26,15 +26,15 @@ detect_linter() {
   elif [ -f ".oxlintrc.json" ] || [ -f "oxlint.json" ]; then
     echo "oxlint"
   elif [ -f "package.json" ]; then
-    if grep -q '"oxlint"' package.json 2>/dev/null; then
+    if rg -q '"oxlint"' package.json 2>/dev/null; then
       echo "oxlint"
     elif [ -f ".eslintrc" ] || [ -f ".eslintrc.js" ] || [ -f ".eslintrc.json" ] || [ -f ".eslintrc.cjs" ] || [ -f "eslint.config.js" ] || [ -f "eslint.config.mjs" ] || [ -f "eslint.config.ts" ]; then
       echo "eslint"
-    elif grep -q '"eslint"' package.json 2>/dev/null; then
+    elif rg -q '"eslint"' package.json 2>/dev/null; then
       echo "eslint"
-    elif grep -q '"prettier"' package.json 2>/dev/null; then
+    elif rg -q '"prettier"' package.json 2>/dev/null; then
       echo "prettier"
-    elif grep -q '"lint"' package.json 2>/dev/null; then
+    elif rg -q '"lint"\s*:' package.json 2>/dev/null; then
       echo "npm-lint"
     else
       echo "none"

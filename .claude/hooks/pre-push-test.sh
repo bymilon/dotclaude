@@ -24,20 +24,20 @@ detect_test_runner() {
   if [ -f "package.json" ]; then
     if [ -f "vitest.config.ts" ] || [ -f "vitest.config.js" ] || [ -f "vitest.config.mts" ]; then
       echo "vitest"
-    elif grep -q '"vitest"' package.json 2>/dev/null; then
+    elif rg -q '"vitest"' package.json 2>/dev/null; then
       echo "vitest"
     elif [ -f "jest.config.ts" ] || [ -f "jest.config.js" ] || [ -f "jest.config.mjs" ]; then
       echo "jest"
-    elif grep -q '"jest"' package.json 2>/dev/null; then
+    elif rg -q '"jest"' package.json 2>/dev/null; then
       echo "jest"
-    elif grep -q '"test"' package.json 2>/dev/null; then
+    elif rg -q '"test"\s*:' package.json 2>/dev/null; then
       echo "npm-test"
     else
       echo "none"
     fi
   elif [ -f "composer.json" ]; then
     if [ -f "phpunit.xml" ] || [ -f "phpunit.xml.dist" ]; then
-      if grep -q '"pestphp/pest"' composer.json 2>/dev/null || [ -d "vendor/pestphp" ]; then
+      if rg -q '"pestphp/pest"' composer.json 2>/dev/null || [ -d "vendor/pestphp" ]; then
         echo "pest"
       else
         echo "phpunit"

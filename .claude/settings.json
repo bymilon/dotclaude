@@ -1,26 +1,64 @@
 {
   "enableAllProjectMcpServers": true,
   "permissions": {
-    "allow": []
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Edit",
+      "Write",
+      "Bash(git status:*)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git branch:*)",
+      "Bash(git show:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git pull:*)",
+      "Bash(git fetch:*)",
+      "Bash(git checkout:*)",
+      "Bash(git merge:*)",
+      "Bash(git rebase:*)",
+      "Bash(git stash:*)",
+      "Bash(git remote:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(wc:*)",
+      "Bash(echo:*)",
+      "Bash(mkdir:*)",
+      "Bash(cat:*)",
+      "Bash(bunx:*)",
+      "Bash(bun run:*)",
+      "Bash(bun test:*)",
+      "Bash(bun install:*)",
+      "Bash(rg:*)",
+      "Bash(codemogger:*)",
+      "Bash(memelord:*)"
+    ]
   },
   "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [{"type": "command", "command": "bash .claude/hooks/preflight.sh"}]
+      }
+    ],
     "PreToolUse": [
       {
         "matcher": "Bash",
-        "type": "command",
-        "command": "bash .claude/hooks/pre-commit-lint.sh"
+        "hooks": [{"type": "command", "command": "bash .claude/hooks/pre-commit-lint.sh"}]
       },
       {
         "matcher": "Bash",
-        "type": "command",
-        "command": "bash .claude/hooks/pre-push-test.sh"
+        "hooks": [{"type": "command", "command": "bash .claude/hooks/pre-push-test.sh"}]
       }
     ],
     "PostToolUse": [
       {
         "matcher": "Write|Edit",
-        "type": "command",
-        "command": "bash .claude/hooks/post-index-update.sh"
+        "hooks": [{"type": "command", "command": "bash .claude/hooks/post-index-update.sh"}]
       }
     ]
   }

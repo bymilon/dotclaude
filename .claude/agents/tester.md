@@ -2,7 +2,7 @@
 name: tester
 description: Test writer that creates comprehensive, co-located tests following project testing policy
 model: claude-sonnet-4-6
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash(git:*), Bash(npm:*), Bash(npx:*), Bash(bun:*), Bash(php:*), Bash(cargo:*), Bash(pytest:*), Bash(go:*)
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash(git:*), Bash(bun:*), Bash(bunx:*), Bash(php:*), Bash(cargo:*), Bash(pytest:*), Bash(go:*)
 ---
 
 # Tester Agent
