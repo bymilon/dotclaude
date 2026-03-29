@@ -156,6 +156,7 @@ Every layer is passive or automatic. You just type commands and write code.
 | `/onboard` | First time in a project — build full mental model |
 | `/kickoff` | Start a new feature — branch + slice scaffold |
 | `/feature` | Implement a vertical slice |
+| `/build` | Compound pipeline — plan, implement, evaluate (for ambitious features) |
 | `/fix` | Known bug — root cause first, then fix |
 | `/debug` | Unknown failure — systematic fault isolation |
 | `/ship` | Lint + test + commit + push |

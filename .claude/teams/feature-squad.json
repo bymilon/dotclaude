@@ -1,13 +1,19 @@
 {
   "_description": "Blueprint for feature development teams. Use with TeamCreate or /kickoff.",
   "_requires": "Set CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 in your shell or settings.json env section",
-  "_workflow": "Sequential: architect → implementer → tester → lead review gate",
-  "_usage": "TeamCreate with this blueprint, or reference via /kickoff command",
+  "_workflow": "Sequential: planner → architect → implementer → tester → evaluator → lead gate",
+  "_usage": "TeamCreate with this blueprint, or reference via /kickoff or /build command",
   "roles": [
     {
       "name": "lead",
-      "role": "Coordinator — breaks down the feature, assigns tasks, reviews final output. Gates quality before merge.",
+      "role": "Coordinator — gates spec, plan, and final output. Routes evaluator findings back to implementer if ITERATE verdict.",
       "model": "claude-sonnet-4-6"
+    },
+    {
+      "name": "planner",
+      "role": "Expands brief into full product spec using .claude/agents/planner.md. Produces user stories, features, edge cases, success criteria. Read-only.",
+      "model": "claude-sonnet-4-6",
+      "agent": "planner"
     },
     {
       "name": "architect",
@@ -25,13 +31,22 @@
       "role": "Writes and runs tests using .claude/agents/tester.md. Co-located test files. Verifies all tests pass before handoff.",
       "model": "claude-sonnet-4-6",
       "agent": "tester"
+    },
+    {
+      "name": "evaluator",
+      "role": "Grades output using .claude/agents/evaluator.md. Scores Correctness (3x), Completeness (2x), Quality (2x), UX Coherence (1x). Produces PASS/ITERATE/FAIL verdict.",
+      "model": "claude-sonnet-4-6",
+      "agent": "evaluator"
     }
   ],
   "sequence": [
-    "1. architect produces structured implementation plan",
-    "2. lead reviews and approves plan (gates before implementation)",
-    "3. implementer builds feature following the plan",
-    "4. tester writes co-located tests and runs full suite",
-    "5. lead performs final review — approves or requests changes"
+    "1. planner expands brief into full product spec",
+    "2. lead reviews and approves spec (gates before architecture)",
+    "3. architect produces structured implementation plan from spec",
+    "4. lead reviews and approves plan (gates before implementation)",
+    "5. implementer builds feature following the plan",
+    "6. tester writes co-located tests and runs full suite",
+    "7. evaluator grades output against spec — produces scored verdict",
+    "8. lead routes: PASS → done, ITERATE → implementer fixes critical findings, FAIL → user decides"
   ]
 }
