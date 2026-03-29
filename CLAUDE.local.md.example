@@ -1,0 +1,50 @@
+# Local Overrides (Personal — DO NOT COMMIT)
+
+Copy this file to `CLAUDE.local.md` and customize for your machine.
+This file is gitignored automatically.
+
+## Local Environment
+
+<!-- Uncomment and customize as needed -->
+
+<!-- - Local DB: sqlite:local.db -->
+<!-- - API key env var: export TURSO_AUTH_TOKEN=... -->
+<!-- - Dev server port: 3000 -->
+
+## Windows Setup (Git Bash + PowerShell)
+
+<!-- Verify these once after cloning on Windows: -->
+<!--                                                                          -->
+<!-- 1. Line endings — prevent hook script failures:                          -->
+<!--    git config core.autocrlf input                                        -->
+<!--                                                                          -->
+<!-- 2. Git identity — required for commits:                                  -->
+<!--    git config user.email "you@example.com"                               -->
+<!--    git config user.name "Your Name"                                      -->
+<!--                                                                          -->
+<!-- 3. bun in PATH — verify in Git Bash:                                     -->
+<!--    bun --version                                                          -->
+<!--    If missing: https://bun.sh (installs to %USERPROFILE%\.bun\bin)       -->
+<!--                                                                          -->
+<!-- 4. Optional MCP tools — install once globally:                           -->
+<!--    bun add -g codemogger memelord                                        -->
+<!--                                                                          -->
+<!-- 5. Verify hooks work:                                                    -->
+<!--    bash .claude/hooks/preflight.sh                                       -->
+<!--    (should exit silently if environment is clean)                        -->
+
+## Session Start
+
+<!-- Paste the init prompt from .me/init-prompt.md at the start of your first          -->
+<!-- message in any new project session. It sets the engineering mindset, stack,        -->
+<!-- MCP stack context, and decision protocol for the entire session.                   -->
+<!--                                                                                    -->
+<!-- Harness review: when a new Claude model ships, run /debate on the current          -->
+<!-- harness — ask what's no longer load-bearing and what new patterns are possible.    -->
+<!-- Opus 4.6 eliminated sprints. The next model will eliminate something else.         -->
+
+## Personal Preferences
+
+<!-- - I prefer verbose error messages during development -->
+<!-- - Always show full stack traces -->
+<!-- - Use dark mode in any UI output -->

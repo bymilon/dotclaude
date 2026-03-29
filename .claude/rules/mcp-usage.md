@@ -64,3 +64,10 @@ No conflicts — each layer operates at a different level:
 - codemogger = code discovery
 - memelord = episodic memory
 - context-mode = context window protection
+
+### Harness Review Principle
+
+When a new Claude model ships, re-examine the harness: strip what's no longer load-bearing, add what's newly possible. Run `/debate` on the current scaffold to surface candidates.
+
+> Opus 4.6 eliminated the sprint construct (model handles coherence natively).
+> The next model will eliminate something else — or unlock a pattern not yet viable.
